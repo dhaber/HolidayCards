@@ -1,0 +1,13 @@
+.form-signin {
+    margin: 0 auto;
+    max-width: 330px;
+    padding: 60px 15px;
+}
+
+.form-signin .form-control {
+	margin-bottom: 10px;
+}
+
+.error .container {
+	padding-top: 60px;
+}
