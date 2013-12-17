@@ -22,18 +22,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
-			.authorizeRequests()
-				.anyRequest()
-					.hasRole("USER")
-				.antMatchers("/fonts/**")
-					.permitAll()
-			.and()
 			.formLogin()
 				.loginPage("/login")
 				.failureUrl("/login?error=UNKNOWN_CREDENTIALS")
-				.permitAll();
+				.permitAll()
+			.and()
+				.logout()
+					.logoutSuccessUrl("/login?logout=true")
+			.and()
+				.authorizeRequests()
+					.antMatchers("/fonts/**")
+						.permitAll()
+					.anyRequest()
+						.hasRole("USER")
+			;
 			
 	}
-	
-	
+		
 }

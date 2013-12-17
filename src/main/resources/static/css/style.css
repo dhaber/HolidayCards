@@ -11,3 +11,14 @@
 .error .container {
 	padding-top: 60px;
 }
+
+body.home {
+  padding-top: 80px;
+  padding-bottom: 20px;
+}
+
+.home .navbar {
+  margin-top: 15px;
+}
+
+

@@ -18,7 +18,7 @@
 	          <input type="checkbox" value="remember-me"/> Remember me
 	        </label>
 	        <button class="btn btn-lg btn-primary btn-block" type="submit" id="login" value="Login">Sign in</button>
-			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
 	 	</form>
 	</div>
   </body>
