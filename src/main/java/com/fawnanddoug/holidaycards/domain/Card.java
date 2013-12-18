@@ -14,7 +14,7 @@ public class Card implements Serializable {
 
 	@Id
     @GeneratedValue
-    private long id;
+    private int id;
     
     @Column(nullable=false)
     private String name;
@@ -29,7 +29,7 @@ public class Card implements Serializable {
     	this.count = count;
     }
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 

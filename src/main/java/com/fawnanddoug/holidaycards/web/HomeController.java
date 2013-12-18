@@ -31,8 +31,8 @@ public class HomeController {
 	public String home(Model model) {
 		HolidayList list = getCurrentHolidayList();
 		model.addAttribute("currentList", list);
-		model.addAttribute("holidayLists", holidayListRepository.findAllOrderByYear());
-		model.addAttribute("holidayListItems", holidayListItemRepository.findAllByHolidayList(list));
+		model.addAttribute("holidayLists", holidayListRepository.findOrderByYear());
+		model.addAttribute("holidayListItems", holidayListItemRepository.findByHolidayList(list));
 		return "home";
 	}
 	
@@ -45,7 +45,7 @@ public class HomeController {
 		HolidayList list = (HolidayList) requestAttributes.getAttribute("holidayList", RequestAttributes.SCOPE_SESSION);
 		if (list == null) {
 			int year = Calendar.getInstance().get(Calendar.YEAR);
-			List<HolidayList> lists = this.holidayListRepository.findAllOrderByYear();
+			List<HolidayList> lists = this.holidayListRepository.findOrderByYear();
 			list = getCurrentHolidayList(lists, year);
 			requestAttributes.setAttribute("holidayList", list, RequestAttributes.SCOPE_SESSION);			
 		}

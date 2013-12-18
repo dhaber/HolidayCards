@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.springframework.util.StringUtils;
+
 @Entity
 public class Address implements Serializable {
 
@@ -14,13 +16,13 @@ public class Address implements Serializable {
 
 	@Id
     @GeneratedValue
-    private long id;
+    private int id;
     
     @Column(nullable=false)
     private String firstname;
 
     @Column(nullable=false)
-    private String lastName;
+    private String lastname;
     
     @Column(nullable=true)
     private String spouse;
@@ -56,7 +58,7 @@ public class Address implements Serializable {
     
     public Address(String firstname, String lastname, String address, String address2, String city, String state, String zip, String country) {
     	this.firstname = firstname;
-    	this.lastName = lastname;
+    	this.lastname = lastname;
     	this.address = address;
     	this.address2 = address2;
     	this.city = city;
@@ -64,8 +66,22 @@ public class Address implements Serializable {
     	this.zip = zip;
     	this.country = country;
     }
+    
+    public String getFullAddress() {
+    	String out = this.address;
+    	out += add(this.address2);
+    	out += add(this.city);
+    	out += add(this.state);
+    	out += add(this.zip);
+    	out += add(this.country);
+    	return out;
+    }
+    
+    private String add(String text) {
+    	return StringUtils.hasText(text) ? " " + text : "";
+    }
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -73,8 +89,8 @@ public class Address implements Serializable {
 		return firstname;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getLastname() {
+		return lastname;
 	}
 
 	public String getSpouse() {

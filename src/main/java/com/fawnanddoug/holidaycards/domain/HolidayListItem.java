@@ -10,14 +10,14 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-@Entity
+@Entity(name="holidaylistitem")
 public class HolidayListItem implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue
-    private long id;
+    private int id;
     
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="holidaylistid")
@@ -35,13 +35,13 @@ public class HolidayListItem implements Serializable {
     @JoinColumn(name="cardid")
     private Card card;
     
-    @Column
+    @Column(columnDefinition = "bit")
     private boolean gift;
 
-    @Column(name="sentcard")
+    @Column(name="sentcard", columnDefinition = "bit")
     private boolean sentCard;
     
-    @Column(name="receivedcard")
+    @Column(name="receivedcard", columnDefinition = "bit")
     private boolean receivedCard;
     
     protected HolidayListItem() {}
@@ -56,7 +56,7 @@ public class HolidayListItem implements Serializable {
     	this.receivedCard = receivedCard;
     }
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 

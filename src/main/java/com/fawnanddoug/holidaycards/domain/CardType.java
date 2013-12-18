@@ -7,14 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
+@Entity(name="cardtype")
 public class CardType implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
     @GeneratedValue
-    private long id;
+    private int id;
     
     @Column(nullable=false)
     private String name;
@@ -25,7 +25,7 @@ public class CardType implements Serializable {
     	this.name = name;
     }
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 

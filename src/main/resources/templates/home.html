@@ -53,15 +53,11 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr th:each="item : ${items}">
-						<td><a href="ownerDetails.html"
-							th:href="@{|/owners/${owner.id}|}"
-							th:text="|${owner.firstName} ${owner.lastName}|">Mary Smith</a></td>
-						<td th:text="${owner.address}">45, Oxford Street</td>
-						<td th:text="${owner.city}">Cambridge</td>
-						<td th:text="${owner.telephone}">555-555-555</td>
-						<td><span th:each="pet : ${owner.pets}" th:text="${pet.name}"
-							th:remove="tag"> Rob </span></td>
+					<tr th:each="i : ${holidayListItems}">
+						<td th:text="|${i.address.firstname} ${i.address.lastname}|"></td>
+						<td th:text="${i.address.fullAddress}"></td>
+						<td th:text="${i.card.name}"></td>						
+						<td th:text="${i.receivedCard}"></td>						
 					</tr>
 				</tbody>
 			</table>

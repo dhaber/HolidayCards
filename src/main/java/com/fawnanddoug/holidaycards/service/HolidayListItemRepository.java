@@ -9,6 +9,6 @@ import com.fawnanddoug.holidaycards.domain.HolidayListItem;
 
 public interface HolidayListItemRepository extends JpaRepository<HolidayListItem, Long> {
 	
-	public List<HolidayListItem> findAllByHolidayList(HolidayList holidayList);
+	public List<HolidayListItem> findByHolidayList(HolidayList holidayList);
 
 }
