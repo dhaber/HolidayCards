@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+  		xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+  		layout:decorator="template">
+  <head>
+    <title>Holiday Cards!</title>
+  </head>
+  
+  <body class="admin">
+	<div layout:fragment="header">
+ 			<h1>Administration <small>Ways to break things</small></h1>
+	</div>
+  	<div layout:fragment="page">
+		<p th:if="${message}" class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span><span th:text="${message}"></span></p>
+		<div class="row">
+			<form class="form-inline" role="form" action="/admin/card" method="POST">
+			  <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+			  <div class="form-group">
+			    <label class="sr-only" for="cardName">New Card</label>
+			    <input type="text" class="form-control" name="name" id="cardName" placeholder="New Card Name"/>
+			  </div>
+			  <div class="form-group">
+			    <label class="sr-only" for="cardCound">Count</label>
+			    <input type="number" class="form-control" name="count" id="cardCound" placeholder="Card Count"/>
+			  </div>
+			  <button type="submit" class="btn btn-default">Save</button>
+			</form>
+		</div>
+		<div class="row">
+			<form class="form-inline" role="form" action="/admin/list" method="POST">
+			  <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+			  <div class="form-group">
+			    <label class="sr-only" for="listYear">New List Year</label>
+			    <input type="number" class="form-control" id="listYear" name="year" placeholder="New List Year"/>
+			  </div>
+			  <div class="form-group">
+			    <label class="sr-only" for="defaultCard">Default Card</label>
+				<select class="form-control" name="defaultCardId" id="defaultCard">
+					<option 
+							th:each="card : ${cards}" 
+	          				th:value="${card.id}" 
+	          				th:text="${card.name}">2012 Printed</option>
+				</select>			  
+			  </div>
+			  <button type="submit" class="btn btn-default">Save</button>
+			</form>
+		</div>
+	</div>
+  </body>
+</html>	

@@ -88,4 +88,12 @@ public class HolidayListItem implements Serializable {
 		return receivedCard;
 	}
 
+	public void setCard(Card card) {
+		this.card = card;
+	}
+
+	public void setReceivedCard(boolean receivedCard) {
+		this.receivedCard = receivedCard;
+	}
+
 }

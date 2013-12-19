@@ -13,12 +13,19 @@
 }
 
 body.home {
-  padding-top: 80px;
+  padding-top: 65px;
   padding-bottom: 20px;
 }
 
-.home .navbar {
-  margin-top: 15px;
+body.admin {
+  padding-top: 65px;
+  padding-bottom: 20px;
 }
 
+.admin .row {
+	margin-bottom: 20px;
+}
 
+.admin .form-group {
+	margin-right: 20px;
+}

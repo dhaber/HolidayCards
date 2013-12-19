@@ -11,6 +11,8 @@ import javax.persistence.Id;
 public class CardType implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	public static final CardType HOLIDAY = new CardType(1, "Holiday");
 
 	@Id
     @GeneratedValue
@@ -18,6 +20,11 @@ public class CardType implements Serializable {
     
     @Column(nullable=false)
     private String name;
+    
+    private CardType(int id, String name) {
+    	this.id = id;
+    	this.name = name;
+    }
     
     protected CardType() {}
     
