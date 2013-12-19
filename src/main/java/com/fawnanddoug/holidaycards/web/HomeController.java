@@ -3,8 +3,6 @@ package com.fawnanddoug.holidaycards.web;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -70,6 +68,16 @@ public class HomeController {
 		Card card = cardRepository.findOne(cardId);
 		
 		item.setCard(card);
+		holidayListItemRepository.save(item);
+		return "success";
+		
+	}
+	
+	@RequestMapping(value="/hli/{id}/received", method=RequestMethod.POST)
+	@ResponseBody
+	public String updateReceived(@PathVariable int id, @RequestParam(required=false) boolean receivedCard) {
+		HolidayListItem item = holidayListItemRepository.findOne(id);		
+		item.setReceivedCard(receivedCard);
 		holidayListItemRepository.save(item);
 		return "success";
 		

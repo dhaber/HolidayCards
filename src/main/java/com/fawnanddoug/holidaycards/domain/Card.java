@@ -19,7 +19,7 @@ public class Card implements Serializable {
     @Column(nullable=false)
     private String name;
 	
-    @Column(nullable=false)
+    @Column(nullable=false, name="\"count\"")
     private int count;
     
     protected Card() {}
