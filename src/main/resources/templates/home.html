@@ -41,7 +41,8 @@
 							<td th:text="|${i.address.firstname} ${i.address.lastname}|"></td>
 							<td th:text="${i.address.fullAddress}"></td>
 							<td>
-								<form th:action="|/${i.id}/card|" method="POST">
+								<form th:action="|/hli/${i.id}/card|" method="POST">
+								<input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
 									<select name="cardId">
 										<option 
 												th:each="card : ${cards}" 
@@ -75,8 +76,9 @@
 					var form = results.serialize();					
 					var url = results[0].action;
 					$.post(url, form).done(function() {
-						tr.removeClass("warning");
-						tr.addClass("success");
+						tr.switchClass("warning", "success", {duration: 20000} );
+						//tr.removeClass("warning");
+						//tr.addClass("success");
 										
 					}).fail(function() {
 						tr.removeClass("warning");

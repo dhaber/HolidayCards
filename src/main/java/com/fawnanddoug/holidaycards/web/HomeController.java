@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,9 +63,9 @@ public class HomeController {
 		
 	}
 	
-	@RequestMapping(value="/{id}/card", method=RequestMethod.POST)
+	@RequestMapping(value="/hli/{id}/card", method=RequestMethod.POST)
 	@ResponseBody
-	public String updateCard(@PathParam("id") int id, @RequestParam int cardId) {
+	public String updateCard(@PathVariable int id, @RequestParam int cardId) {
 		HolidayListItem item = holidayListItemRepository.findOne(id);
 		Card card = cardRepository.findOne(cardId);
 		
