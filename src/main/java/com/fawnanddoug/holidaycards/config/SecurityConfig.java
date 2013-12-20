@@ -21,8 +21,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// In mysql case get the users from the DB
 		if (environment.acceptsProfiles("mysql")) {
 			auth.jdbcAuthentication()
-				.authoritiesByUsernameQuery("select username,password, enabled from users where username=?")
-				.usersByUsernameQuery("select u.username, ur.authority from users u, user_roles ur where u.user_id = ur.user_id and u.username =?");
+				.usersByUsernameQuery("select name,password,true from user where name=?")
+				.authoritiesByUsernameQuery("select u.name, r.authority from user u, role r where u.id = r.userid and u.name =?");
 			
 		// else use in memory auth
 		} else {
