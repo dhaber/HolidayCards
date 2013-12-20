@@ -1,5 +1,7 @@
 package com.fawnanddoug.holidaycards.config;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -16,12 +18,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private Environment environment;
 	
+	@Autowired
+	private DataSource dataSource;
+	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		// In mysql case get the users from the DB
 		if (environment.acceptsProfiles("mysql")) {
 			auth.jdbcAuthentication()
-				.usersByUsernameQuery("select name,password,true from user where name=?")
+				.dataSource(dataSource)
+				.usersByUsernameQuery("select name,password,enabled from user where name=?")
 				.authoritiesByUsernameQuery("select u.name, r.authority from user u, role r where u.id = r.userid and u.name =?");
 			
 		// else use in memory auth
