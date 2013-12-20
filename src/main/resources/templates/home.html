@@ -8,7 +8,7 @@
   
   <body class="home">
 	<div layout:fragment="header">
- 			<h1>Holiday Cards List <small>Friends n' stuff</small></h1>
+ 			<h1>Holiday Cards List <small>Friends n' stuff</small> <small class="pull-right"><span id="count"></span> cards</small></h1>
 	</div>
   	<div layout:fragment="page">
 		<div class="row">
@@ -38,8 +38,8 @@
 				</thead>
 				<tbody>
 					<tr th:each="i : ${holidayListItems}">
-							<td th:text="|${i.address.firstname} ${i.address.lastname}|"></td>
-							<td th:text="${i.address.fullAddress}"></td>
+							<td><a th:id="|name*{id}|" class="addressLink" th:object="${i.address}" th:href="|javascript:editDetails(*{id},'*{address}','*{address2}','*{city}','*{state}','*{zip}','*{country}', '*{firstname}', '*{lastname}');|" th:text="|${i.address.firstname} ${i.address.lastname}|"></a></td>
+							<td><a th:id="|address*{id}|" class="addressLink" th:object="${i.address}" th:href="|javascript:editDetails(*{id},'*{address}','*{address2}','*{city}','*{state}','*{zip}','*{country}', '*{firstname}', '*{lastname}');|" th:text="*{fullAddress != '' ? fullAddress : 'None'}"></a></td>
 							<td>
 								<form th:action="|/hli/${i.id}/card|" method="POST">
 									<input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
@@ -64,29 +64,190 @@
 		</div>
 	</div>
 	<div layout:fragment="footer">
-		<script>			
+		<div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		        <h4 class="modal-title" id="addressModalLabel">Change Details for <strong id="addressName"></strong></h4>
+		      </div>
+		      <div class="modal-body">
+				<div id="addressErrorMessage" class="alert alert-danger hidden">
+					<span class="glyphicon glyphicon-warning-sign"></span> Error Saving Data. Please Try Again.
+				</div>
+		      	<form id="addressForm" action="/address" method="POST" class="form-horizontal" role="form">
+		      		  <input type="hidden" id="addressId" name="id"/>
+					  <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+					  <div class="form-group">
+					    <label for="firstname" class="col-sm-3 control-label">First Name</label>
+					    <div class="col-sm-9">
+					      <input type="text" name="firstname" class="form-control" id="firstname" placeholder="First Name"/>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="address" class="col-sm-3 control-label">Last Name</label>
+					    <div class="col-sm-9">
+					      <input type="text" name="lastname" class="form-control" id="lastname" placeholder="Last Name"/>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="address" class="col-sm-3 control-label">Address</label>
+					    <div class="col-sm-9">
+					      <input type="text" name="address" class="form-control" id="address" placeholder="Address"/>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="addres2s" class="col-sm-3 control-label">Address2</label>
+					    <div class="col-sm-9">
+					      <input type="text" name="address2" class="form-control" id="address2" placeholder="Address2"/>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="city" class="col-sm-3 control-label">City</label>
+					    <div class="col-sm-9">
+					      <input type="text" name="city" class="form-control" id="city" placeholder="City"/>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="state" class="col-sm-3 control-label">State</label>
+					    <div class="col-sm-9">
+					      <input type="text" name="state" class="form-control" id="state" placeholder="State"/>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="zip" class="col-sm-3 control-label">Zip</label>
+					    <div class="col-sm-9">
+					      <input type="text" name="zip" class="form-control" id="zip" placeholder="Zip"/>
+					    </div>
+					  </div>
+					  <div class="form-group">
+					    <label for="country" class="col-sm-3 control-label">Country</label>
+					    <div class="col-sm-9">
+					      <input type="text" name="country" class="form-control" id="country" placeholder="Country"/>
+					    </div>
+					  </div>
+		      		
+		      	</form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		        <button type="button" data-loading-text="Saving..." class="btn btn-primary saveChanges">Save changes</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
+	
+		<script>
+			//helper function to set the value on an input field
+			var setFieldValue = function(key, value) {
+				$("#" + key).val(value);
+			}
+		
+			// Sets up the address modal and shows it	
+			var editDetails = function(addressId, address, address2, city, state, zip, country, firstname, lastname) {
+				// set the values in the form
+				setFieldValue("addressId", addressId);
+				setFieldValue("address", address);
+				setFieldValue("address2", address2);
+				setFieldValue("city", city);
+				setFieldValue("state", state);
+				setFieldValue("zip", zip);
+				setFieldValue("country", country);
+				setFieldValue("firstname", firstname);
+				setFieldValue("lastname", lastname);
+
+				// Display the user's name
+				$("#addressName").html(firstname + " " + lastname);
+								
+				// Hide any error messages
+				$("#addressErrorMessage").addClass("hidden");
+				
+				// show the modal
+				$("#addressModal").modal();
+				
+			}
+			
+			// helper function to return text with a space in front of it or nothing 
+			var append = function(text) {
+				return !!text ? " " + text : "";
+			}
+			
+			// posts to the server to change the address
+			var handleAddressChange = function() {
+				// Show the button in the loading staet
+				$("#addressModal .saveChanges").button("loading");
+				
+				var form = $("#addressForm");
+				$.post(form.attr("action"), form.serialize())
+					.done(function(result) {
+						var href = "javascript:editDetails(" + result.id + ",'" + result.address + "','" + result.address2 + "','" + result.city + "','" + result.state + "','" + result.zip + "','" + result.country + "', '" + result.firstname + "', '" + result.lastname + "');";						
+						var name = result.firstname + " " + result.lastname;
+						var fullAddress = result.address + append(result.address2) + append(result.city) + append(result.state) + append(result.zip) + append(result.country);
+						
+						// Update the name field
+						$("#name" + result.id).attr("href", href).html(name);
+						
+						// Update the address field
+						$("#address" + result.id).attr("href", href).html(fullAddress);
+						
+						// hide the modal
+						$("#addressModal").modal('hide');
+					
+					}).fail(function() {
+						// Show the error message
+						$("#addressErrorMessage").removeClass("hidden");
+						
+					}).always(function() {
+						// Reset the modal buttons so we can try again
+						$("#addressModal .saveChanges").button("reset");
+						
+					});
+				
+			}
+			
+			// Sets the total number of cards based on how many selects have a non-None value (id > 0)
+			var updateCardCount = function() {
+				$("#count").html($("table select").filter(function(index,select) { return select.value > 0}).length);
+			}
+		
 			$(function() {
+				// submits the form that wraps the field that was updated
 				var submitFieldForm = function(event) {
+					// Add warning class to the row so we know we're trying to send
 					var tr = $(this).closest("tr");
 					tr.addClass("warning");
 					
 					// find the form related to this item
 					var results = $(this).closest("form");
-					var form = results.serialize();					
-					var url = results[0].action;
+					var form = results.serialize();
+					
+					// find the url to post to 
+					var url = results.attr("action");
 					$.post(url, form).done(function() {
+						updateCardCount();
+						
+						// switch to success class if it worked and then remove after a little while
 						tr.switchClass("warning", "success");
 						setTimeout(function() {
 							tr.removeClass("success");
 						}, 3000);
 										
 					}).fail(function() {
+						// switch to error class if it didn't work
 						tr.switchClass("warning", "danger");						
 					})					
 				}
 				
+				// send to server when a select is updated
 				$("table select").change(submitFieldForm);
+				
+				// send to server when a check box is checked/unchecked
 				$("table input[type='checkbox']").change(submitFieldForm);
+				
+				// Handle saving when the user clicks save
+				$("#addressModal .saveChanges").click(handleAddressChange);
+				
+				updateCardCount();
 			});
 		</script>
 	</div>

@@ -132,5 +132,37 @@ public class Address implements Serializable {
 	public String getEmail() {
 		return email;
 	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setAddress2(String address2) {
+		this.address2 = address2;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public void setZip(String zip) {
+		this.zip = zip;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
     
 }

@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import com.fawnanddoug.holidaycards.domain.Address;
 import com.fawnanddoug.holidaycards.domain.Card;
 import com.fawnanddoug.holidaycards.domain.HolidayList;
 import com.fawnanddoug.holidaycards.domain.HolidayListItem;
+import com.fawnanddoug.holidaycards.service.AddressRepository;
 import com.fawnanddoug.holidaycards.service.CardRepository;
 import com.fawnanddoug.holidaycards.service.HolidayListItemRepository;
 import com.fawnanddoug.holidaycards.service.HolidayListRepository;
@@ -28,12 +30,14 @@ public class HomeController {
 	private final HolidayListRepository holidayListRepository;
 	private final HolidayListItemRepository holidayListItemRepository;
 	private final CardRepository cardRepository;
+	private final AddressRepository addressRepository;
 
 	@Autowired
-	public HomeController(HolidayListRepository holidayListRepository, HolidayListItemRepository holidayListItemRepository, CardRepository cardRepository) {
+	public HomeController(HolidayListRepository holidayListRepository, HolidayListItemRepository holidayListItemRepository, CardRepository cardRepository, AddressRepository addressRepository) {
 		this.holidayListRepository = holidayListRepository;
 		this.holidayListItemRepository = holidayListItemRepository;
 		this.cardRepository = cardRepository;
+		this.addressRepository = addressRepository;
 	}
 
 	@RequestMapping(value="/", method=RequestMethod.GET)
@@ -82,6 +86,34 @@ public class HomeController {
 		return "success";
 		
 	}
+	
+	@RequestMapping(value="/address", method=RequestMethod.POST, produces="application/json")
+	@ResponseBody
+	public Address updateAddress(@RequestParam int id, 
+			@RequestParam(required=false) String address, 
+			@RequestParam(required=false) String address2, 
+			@RequestParam(required=false) String city, 
+			@RequestParam(required=false) String state, 
+			@RequestParam(required=false) String zip, 
+			@RequestParam(required=false) String country,
+			@RequestParam(required=false) String firstname,
+			@RequestParam(required=false) String lastname) {
+		
+		Address item = addressRepository.findOne(id);
+		item.setAddress(address);
+		item.setAddress2(address2);
+		item.setCity(city);
+		item.setState(state);
+		item.setZip(zip);
+		item.setCountry(country);
+		item.setFirstname(firstname);
+		item.setLastname(lastname);
+		
+		item = addressRepository.save(item);
+		return item;
+		
+	}
+	
 	
 	/**
 	 * @return  The currently seelcted holiday list or the default one
