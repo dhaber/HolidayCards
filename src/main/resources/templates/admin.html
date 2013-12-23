@@ -13,7 +13,7 @@
   	<div layout:fragment="page">
 		<p th:if="${message}" class="alert alert-info"><span class="glyphicon glyphicon-info-sign"></span><span th:text="${message}"></span></p>
 		<div class="row">
-			<form class="form-inline" role="form" action="/admin/card" method="POST">
+			<form class="form-inline" role="form" action="@{/admin/card}" method="POST">
 			  <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
 			  <div class="form-group">
 			    <label class="sr-only" for="cardName">New Card</label>
@@ -27,7 +27,7 @@
 			</form>
 		</div>
 		<div class="row">
-			<form class="form-inline" role="form" action="/admin/list" method="POST">
+			<form class="form-inline" role="form" action="@{/admin/list}" method="POST">
 			  <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
 			  <div class="form-group">
 			    <label class="sr-only" for="listYear">New List Year</label>

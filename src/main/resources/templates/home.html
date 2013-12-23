@@ -14,7 +14,7 @@
 		<div class="row">
 			<div class="col-md-offset-10 col-md-2 text-right">
 				<strong>Year</strong>
-				<form action="/currentList" method="POST">
+				<form th:action="@{/currentList}" method="POST">
 					<input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
 					<select name="id" onchange="this.form.submit();">
 						<option 
@@ -41,7 +41,7 @@
 							<td><a th:id="|name*{id}|" class="addressLink" th:object="${i.address}" th:href="|javascript:editDetails(*{id},'*{address}','*{address2}','*{city}','*{state}','*{zip}','*{country}', '*{firstname}', '*{lastname}');|" th:text="|${i.address.firstname} ${i.address.lastname}|"></a></td>
 							<td><a th:id="|addy*{id}|" class="addressLink" th:object="${i.address}" th:href="|javascript:editDetails(*{id},'*{address}','*{address2}','*{city}','*{state}','*{zip}','*{country}', '*{firstname}', '*{lastname}');|" th:text="*{fullAddress != '' ? fullAddress : 'None'}"></a></td>
 							<td>
-								<form th:action="|/hli/${i.id}/card|" method="POST">
+								<form th:action="@{|/hli/${i.id}/card|}" method="POST">
 									<input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
 									<select name="cardId">
 										<option 
@@ -53,7 +53,7 @@
 								</form>
 							</td>						
 							<td class="text-center">
-								<form th:action="|/hli/${i.id}/received|" method="POST">
+								<form th:action="@{|/hli/${i.id}/received|}" method="POST">
 									<input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
 									<input type="checkbox" name="receivedCard" th:attr="checked=${i.receivedCard}" />
 								</form>
@@ -75,7 +75,7 @@
 				<div id="addressErrorMessage" class="alert alert-danger hidden">
 					<span class="glyphicon glyphicon-warning-sign"></span> Error Saving Data. Please Try Again.
 				</div>
-		      	<form id="addressForm" action="/address" method="POST" class="form-horizontal" role="form">
+		      	<form id="addressForm" th:action="@{/address}" method="POST" class="form-horizontal" role="form">
 		      		  <input type="hidden" id="addressId" name="id"/>
 					  <input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
 					  <div class="form-group">
