@@ -14,4 +14,6 @@ public interface HolidayListRepository extends JpaRepository<HolidayList, Intege
 	@Query("select h from holidaylist h order by year asc")
 	public List<HolidayList> findOrderByYear();
 	
+	public HolidayList findByYear(int year);
+	
 }
