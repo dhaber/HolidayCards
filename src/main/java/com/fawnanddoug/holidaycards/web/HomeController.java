@@ -17,6 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import com.fawnanddoug.holidaycards.domain.Address;
 import com.fawnanddoug.holidaycards.domain.Card;
+import com.fawnanddoug.holidaycards.domain.CardType;
 import com.fawnanddoug.holidaycards.domain.HolidayList;
 import com.fawnanddoug.holidaycards.domain.HolidayListItem;
 import com.fawnanddoug.holidaycards.service.AddressRepository;
@@ -89,7 +90,7 @@ public class HomeController {
 	
 	@RequestMapping(value="/address", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
-	public Address updateAddress(@RequestParam int id, 
+	public Address handleAddress(@RequestParam int id, 
 			@RequestParam(required=false) String address, 
 			@RequestParam(required=false) String address2, 
 			@RequestParam(required=false) String city, 
@@ -99,6 +100,29 @@ public class HomeController {
 			@RequestParam(required=false) String firstname,
 			@RequestParam(required=false) String lastname) {
 		
+		// -1 means new user, otherwise must be an update
+		if (id == -1) {
+			return newAddress(id, address, address2, city, state, zip, country, firstname, lastname);
+		} else {
+			return updateAddress(id, address, address2, city, state, zip, country, firstname, lastname);
+		}
+	}
+	
+	/**
+	 * Update an existing address
+	 * 
+	 * @param id
+	 * @param address
+	 * @param address2
+	 * @param city
+	 * @param state
+	 * @param zip
+	 * @param country
+	 * @param firstname
+	 * @param lastname
+	 * @return
+	 */
+	public Address updateAddress(int id, String address, String address2, String city, String state, String zip, String country, String firstname, String lastname) {
 		Address item = addressRepository.findOne(id);
 		item.setAddress(address);
 		item.setAddress2(address2);
@@ -114,9 +138,51 @@ public class HomeController {
 		
 	}
 	
+	/**
+	 * Create a new address and add it to all holiday lists
+	 * 
+	 * @param id
+	 * @param address
+	 * @param address2
+	 * @param city
+	 * @param state
+	 * @param zip
+	 * @param country
+	 * @param firstname
+	 * @param lastname
+	 * @return
+	 */
+	public Address newAddress(int id, String address, String address2, String city, String state, String zip, String country, String firstname, String lastname) {
+		
+		// find all holiday lists
+		List<HolidayList> lists = this.holidayListRepository.findOrderByYear();
+		
+		// Find the NONE card
+		Card card = cardRepository.findOne(0);
+		
+		// Create the new address and save it
+		Address item = new Address(firstname, lastname, address, address2, city, state, zip, country);		
+		item = addressRepository.save(item);
+
+		// Add this address to every list
+		// Default to NONE card
+		for (HolidayList list : lists) {
+			holidayListItemRepository.save(
+					new HolidayListItem(
+							list, 
+							item, 
+							CardType.HOLIDAY, 
+							card, 
+							false, 			// no gift 
+							false, 		// haven't sent card
+							false));	// haven't received a card
+		}
+		
+		return item;		
+	}
 	
 	/**
-	 * @return  The currently seelcted holiday list or the default one
+	 * @return  The currently selected holiday list or the default one
 	 */
 	private HolidayList getCurrentHolidayList() {
 		RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();

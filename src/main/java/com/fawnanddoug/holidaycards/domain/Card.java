@@ -11,7 +11,7 @@ import javax.persistence.Id;
 public class Card implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
     @GeneratedValue
     private int id;
@@ -21,7 +21,7 @@ public class Card implements Serializable {
 	
     @Column(nullable=false, name="\"count\"")
     private int count;
-    
+        
     protected Card() {}
     
     public Card(String name, int count) {
