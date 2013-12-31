@@ -40,7 +40,7 @@ public class HomeController {
 		this.cardRepository = cardRepository;
 		this.addressRepository = addressRepository;
 	}
-
+	
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String home(Model model) {
 		HolidayList list = getCurrentHolidayList();
