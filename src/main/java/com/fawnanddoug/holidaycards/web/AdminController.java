@@ -113,9 +113,11 @@ public class AdminController {
 							address, 
 							CardType.HOLIDAY, 
 							card, 
-							false, 			// no gift 
+							false, 		// no gift 
 							false, 		// haven't sent card
-							false));	// haven't received a card
+							false, 		// haven't received a card
+							false		// haven't confirmed address
+							));	
 		}		
 		
 	}
@@ -137,9 +139,12 @@ public class AdminController {
 							item.getAddress(), 
 							item.getCardType(), 
 							item.getCard(), 
-							false, 			// no gift 
+							false, 		// no gift 
 							false, 		// haven't sent card
-							false));	// haven't received a card
+							false,		// haven't received a card
+							false		// haven't confirmed address
+							));
+							
 			
 		}
 	}	

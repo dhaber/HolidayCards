@@ -88,6 +88,16 @@ public class HomeController {
 		
 	}
 	
+	@RequestMapping(value="/hli/{id}/confirmed", method=RequestMethod.POST)
+	@ResponseBody
+	public String updateConfirmed(@PathVariable int id, @RequestParam(required=false) boolean confirmedAddress) {
+		HolidayListItem item = holidayListItemRepository.findOne(id);		
+		item.setConfirmedAddress(confirmedAddress);
+		holidayListItemRepository.save(item);
+		return "success";		
+	}
+	
+	
 	@RequestMapping(value="/address", method=RequestMethod.POST, produces="application/json")
 	@ResponseBody
 	public Address handleAddress(@RequestParam int id, 
@@ -175,7 +185,9 @@ public class HomeController {
 							card, 
 							false, 			// no gift 
 							false, 		// haven't sent card
-							false));	// haven't received a card
+							false,		// haven't received a card
+							false		// haven't confirmed address
+							));
 		}
 		
 		return item;		

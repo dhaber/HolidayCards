@@ -39,6 +39,7 @@
 						<th>Name</th>
 						<th>Address</th>
 						<th>Card</th>
+						<th>Confirmed Address</th>
 						<th>Received Card</th>
 					</tr>
 				</thead>
@@ -58,6 +59,12 @@
 									</select>
 								</form>
 							</td>						
+							<td class="text-center">
+								<form th:action="@{|/hli/${i.id}/confirmed|}" method="POST">
+									<input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />
+									<input type="checkbox" name="confirmedAddress" th:attr="checked=${i.confirmedAddress}" />
+								</form>
+							</td>
 							<td class="text-center">
 								<form th:action="@{|/hli/${i.id}/received|}" method="POST">
 									<input type="hidden" th:name="${_csrf?.parameterName}" th:value="${_csrf?.token}" />

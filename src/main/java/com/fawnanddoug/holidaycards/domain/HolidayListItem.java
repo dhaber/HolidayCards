@@ -44,9 +44,12 @@ public class HolidayListItem implements Serializable {
     @Column(name="receivedcard", columnDefinition = "bit")
     private boolean receivedCard;
     
+    @Column(name="confirmedaddress", columnDefinition = "bit")
+    private boolean confirmedAddress;
+    
     protected HolidayListItem() {}
     
-    public HolidayListItem(HolidayList holidayList, Address address, CardType cardType, Card card, boolean gift, boolean sentCard, boolean receivedCard) {
+    public HolidayListItem(HolidayList holidayList, Address address, CardType cardType, Card card, boolean gift, boolean sentCard, boolean receivedCard, boolean confirmedAddress) {
     	this.holidayList = holidayList;
     	this.address = address;
     	this.cardType = cardType;
@@ -54,6 +57,7 @@ public class HolidayListItem implements Serializable {
     	this.gift = gift;
     	this.sentCard = sentCard;
     	this.receivedCard = receivedCard;
+    	this.confirmedAddress = confirmedAddress;
     }
 
 	public int getId() {
@@ -94,6 +98,14 @@ public class HolidayListItem implements Serializable {
 
 	public void setReceivedCard(boolean receivedCard) {
 		this.receivedCard = receivedCard;
+	}
+
+	public boolean isConfirmedAddress() {
+		return confirmedAddress;
+	}
+
+	public void setConfirmedAddress(boolean confirmedAddress) {
+		this.confirmedAddress = confirmedAddress;
 	}
 
 }
