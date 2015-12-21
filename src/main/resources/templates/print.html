@@ -1,0 +1,75 @@
+<html>
+<head>
+<style>
+	@page {
+		size: portrait;
+		margin: 0.42in 0.22in 0.42in 0.22in;
+	}
+	table {
+		table-layout:fixed;	
+	}
+	tr {
+		width: 100%;
+		margin: 0;
+	}
+	td {
+		font-size: 11px;
+		font-family: sans-serif;
+		width: 2.57in;
+		/* height: 0.29in; */
+		margin: 0;
+		vertical-align: top;
+		-moz-box-sizing: border-box;
+		-webkit-box-sizing: border-box;
+		box-sizing: border-box;
+		padding: 0.00in;
+		/*border: 0.1px solid black;*/
+		overflow: hidden;
+	}
+	td div {
+		height: 0.94in;
+		overflow: hidden;
+	}
+	td.separator {
+		width: 0.12in;
+	}
+	* {
+		font-family: sans-serif;
+	}
+	td h1, td h2, td p {
+		font-size: 12px;
+	}
+	td span {
+		display: block;
+	}
+	td img {
+	    height: 0.6in;
+	    width: 0.6in;
+	    float: left;
+	    margin-right: .2in;
+	    /*margin-bottom: .3in; */
+    }
+</style>
+</head>
+<body>
+	<table>
+		<tr th:each="chunk: ${T(com.google.common.collect.Lists).partition(holidayListItems, 3)}">
+			<th:block th:each="i,row : ${chunk}">
+				<td>
+					<div>
+					    <img th:src="@{/img/us.png}"/>
+						<span th:text="|${i.address.firstname} ${i.address.lastname}|"></span>
+						<span th:object="${i.address}" th:text="*{address}"></span>
+						<span th:object="${i.address}" th:text="*{address2}"></span>
+						<span th:if="${i.address.city != ''}" th:object="${i.address}" th:text="|*{city}, *{state} *{zip} *{country}|"></span>
+					</div>
+				</td>
+				<td th:if="${row.index != 2}" class="separator"></td>
+			</th:block>
+		</tr>
+	</table>
+	<script>
+	window.print();
+	</script>
+</body>
+</html>

@@ -13,4 +13,11 @@ public interface CardRepository extends JpaRepository<Card, Integer> {
 	//@Cacheable("cards")
 	@Query("select c from Card c order by id desc")
 	public List<Card> findOrderByIdDesc();
+	
+	@Query("select c from Card c order by name asc")
+	public List<Card> findOrderByNameAsc();
+	
+	@Query("select c from Card c where id = 35")
+	public Card findNoneCard();
+
 }

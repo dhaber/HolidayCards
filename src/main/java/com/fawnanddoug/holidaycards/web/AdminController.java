@@ -101,7 +101,7 @@ public class AdminController {
 	private void createItemsFromAddresses(HolidayList list) {
 		
 		// Use the default card
-		Card card = cardRepository.findOne(0);
+		Card card = cardRepository.findNoneCard();
 		
 		// Find all addresses to the list
 		List<Address> addresses = addressRepository.findAll();

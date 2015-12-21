@@ -44,20 +44,81 @@ public class HomeController {
 	@RequestMapping(value="/", method=RequestMethod.GET)
 	public String home(Model model) {
 		HolidayList list = getCurrentHolidayList();
+		Card card = getCurrentCard();
+		Boolean confirmed = getCurrentConfirmed();
 		model.addAttribute("currentList", list);
-		model.addAttribute("cards", cardRepository.findOrderByIdDesc());
-		model.addAttribute("holidayLists", holidayListRepository.findOrderByYear());
-		model.addAttribute("holidayListItems", 
-				holidayListItemRepository.findByHolidayList(
+		model.addAttribute("currentCard", card);
+		model.addAttribute("currentConfirmed", confirmed);
+		model.addAttribute("cards", cardRepository.findOrderByNameAsc());
+		model.addAttribute("holidayLists", holidayListRepository.findOrderByYear());		
+		model.addAttribute("holidayListItems", getHolidayListItems(list, card, confirmed));
+		return "home";
+	}
+	
+	@RequestMapping(value="/print", method=RequestMethod.GET)
+	public String print(Model model) {
+		HolidayList list = getCurrentHolidayList();
+		Card card = getCurrentCard();
+		Boolean confirmed = getCurrentConfirmed();
+		model.addAttribute("holidayListItems", getHolidayListItems(list, card, confirmed));
+		return "print";
+	}
+	
+	private Object getHolidayListItems(HolidayList list, Card card, Boolean confirmed) {
+		List<HolidayListItem> hlis = null;
+		if (card != null) {
+			if (confirmed != null) {
+				// we have card and confirmed
+				hlis = holidayListItemRepository.findByHolidayListAndCardAndConfirmedAddress(
+						list, 
+						card,
+						confirmed,
+						new Sort(
+								new Sort.Order("address.firstname"), 
+								new Sort.Order("address.lastname")
+								)
+						);
+			} else {
+				// we only have card
+				hlis = holidayListItemRepository.findByHolidayListAndCard(
+						list, 
+						card,
+						new Sort(
+								new Sort.Order("address.firstname"), 
+								new Sort.Order("address.lastname")
+								)
+						);
+				
+			}
+			
+		} else {
+			// we only have confirmed
+			if (confirmed != null) {
+				hlis = holidayListItemRepository.findByHolidayListAndConfirmedAddress(
+						list, 
+						confirmed,
+						new Sort(
+								new Sort.Order("address.firstname"), 
+								new Sort.Order("address.lastname")
+								)
+						);
+				
+			} else {				
+				// we got nothing
+				hlis = holidayListItemRepository.findByHolidayList(
 						list, 
 						new Sort(
 								new Sort.Order("address.firstname"), 
 								new Sort.Order("address.lastname")
 								)
-						));
-		return "home";
+						);
+			}
+
+		}
+		
+		return hlis;
 	}
-	
+
 	@RequestMapping(value="/currentList", method=RequestMethod.POST)
 	public String home(@RequestParam int id) {
 		HolidayList list = holidayListRepository.findOne(id);
@@ -65,6 +126,26 @@ public class HomeController {
 		return "redirect:/";
 		
 	}
+	
+	@RequestMapping(value="/card", method=RequestMethod.POST)
+	public String card(@RequestParam Integer id) {
+		Card card = null;
+		if (id != null) {
+			card = cardRepository.findOne(id);			
+		}
+		RequestContextHolder.currentRequestAttributes().setAttribute("card", card, RequestAttributes.SCOPE_SESSION);
+		
+		return "redirect:/";				
+	}
+	
+	
+	@RequestMapping(value="/confirmed", method=RequestMethod.POST)
+	public String confirmed(@RequestParam Boolean confirmedAddress) {
+		RequestContextHolder.currentRequestAttributes().setAttribute("confirmed", confirmedAddress, RequestAttributes.SCOPE_SESSION);
+		
+		return "redirect:/";				
+	}
+	
 	
 	@RequestMapping(value="/hli/{id}/card", method=RequestMethod.POST)
 	@ResponseBody
@@ -168,7 +249,7 @@ public class HomeController {
 		List<HolidayList> lists = this.holidayListRepository.findOrderByYear();
 		
 		// Find the NONE card
-		Card card = cardRepository.findOne(0);
+		Card card = cardRepository.findNoneCard();
 		
 		// Create the new address and save it
 		Address item = new Address(firstname, lastname, address, address2, city, state, zip, country);		
@@ -209,7 +290,26 @@ public class HomeController {
 		
 		return list;
 	}
+	
+	/**
+	 * @return  The currently selected card
+	 */
+	private Card getCurrentCard() {
+		RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+		
+		return (Card) requestAttributes.getAttribute("card", RequestAttributes.SCOPE_SESSION);
+	}
+	
 
+	/**
+	 * @return  The currently selected confirmed value
+	 */
+	private Boolean getCurrentConfirmed() {
+		RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+		
+		return (Boolean) requestAttributes.getAttribute("confirmed", RequestAttributes.SCOPE_SESSION);
+	}
+	
 	/**
 	 * Return the holiday list for this year or the most recent one if there is none
 	 * 
