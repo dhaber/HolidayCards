@@ -10,9 +10,12 @@
 	<div layout:fragment="header">
  			<h1>Holiday Cards List <small>Friends n' stuff</small> <small class="pull-right"><span id="count"></span> cards</small></h1>
  			<div class="row">
- 				<div class="col-sm-offset-11">
-					<button type="button" class="btn btn-default" onClick="goToPrint()">
+ 				<div class="col-sm-offset-9 pull-right">
+					<button type="button" class="btn btn-default" onClick="goToPrint(true)">
 					  <span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print
+					</button>
+					<button type="button" class="btn btn-default" onClick="goToPrint(false)">
+					  <span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print No Image
 					</button>
 				</div>
  			</div>
@@ -316,8 +319,8 @@
 				updateCardCount();
 			});
 			
-			function goToPrint() {
-				window.open("./print");
+			function goToPrint(showImage) {
+				window.open("./print?showImage=" + showImage);
 			}
 			/* ]]> */		
 		</script>

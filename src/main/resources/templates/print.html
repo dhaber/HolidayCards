@@ -57,7 +57,7 @@
 			<th:block th:each="i,row : ${chunk}">
 				<td>
 					<div>
-					    <img th:src="@{/img/us.png}"/>
+					    <img th:if="${param.showImage[0]}" th:src="@{/img/us.png}"/>
 						<span th:text="|${i.address.firstname} ${i.address.lastname}|"></span>
 						<span th:object="${i.address}" th:text="*{address}"></span>
 						<span th:object="${i.address}" th:text="*{address2}"></span>
